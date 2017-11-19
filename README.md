@@ -1,6 +1,10 @@
 # charts
 Helm Charts for CI/CD pipeline
 
+#### Install Jenkins:
+
+sh ./setup-jenkins.sh
+
 kubectl delete namespace cd-pipeline || true
 
 kubectl create namespace cd-pipeline || true
