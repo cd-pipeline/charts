@@ -55,7 +55,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Install Clair') {
             git url: 'https://github.com/coreos/clair'
             container('helm') {
-                sh "helm install ./helm/clair -f ./contrib/helm/values.yaml"
+                sh "helm install ./contrib/helm/clair -f ./contrib/helm/clair/values.yaml"
             }
         }
     }
