@@ -52,8 +52,8 @@ Master:
       - permissive-script-security:0.3
       - kubernetes-ci:1.3
 # Used to approve a list of groovy functions in pipelines used the script-security plugin. Can be viewed under /scriptApproval
-  # ScriptApproval:
-  #   - "method groovy.json.JsonSlurperClassic parseText java.lang.String"
+  ScriptApproval:
+    - "staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods readLines java.lang.String"
   #   - "new groovy.json.JsonSlurperClassic"
 # List of groovy init scripts to be executed during Jenkins master start
   InitScripts:

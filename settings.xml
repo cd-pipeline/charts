@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<settings>
+    <mirrors>
+        <mirror>
+            <id>Nexus</id>
+            <name>Nexus Public Mirror</name>
+            <url>http://nexus-sonatype-nexus:8081/repository/maven-central/</url>
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
+
+    <servers>
+        <server>
+            <id>snapshots</id>
+            <username>admin</username>
+            <password>admin123</password>
+        </server>
+        <server>
+            <id>releases</id>
+            <username>admin</username>
+            <password>admin123</password>
+        </server>
+    </servers>
+</settings>

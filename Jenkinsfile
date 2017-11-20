@@ -14,6 +14,14 @@ podTemplate(label: 'mypod', containers: [
             }
         }
 
+        stage('Configure Kubernetes') {
+            git url: 'https://github.com/cd-pipeline/charts.git'
+            container('kubectl') {
+                sh "kubectl delete secret jenkins-maven-settings -n cd-pipeline || true"
+                sh "kubectl create secret generic jenkins-maven-settings --from-file=./settings.xml -n cd-pipeline"
+            }
+        }
+
         stage('Install Nexus') {
             git url: 'https://github.com/cd-pipeline/charts.git'
 
