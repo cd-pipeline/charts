@@ -57,8 +57,11 @@ podTemplate(label: 'mypod', containers: [
             container('helm') {
                 sh "cd ./contrib/helm/clair && helm dependency update"
                 sh "helm install ./contrib/helm/clair -f ./contrib/helm/clair/values.yaml"
-                waitForAllPodsRunning('cd-pipeline')
-                waitForAllServicesRunning('cd-pipeline')
+            }
+
+            container('kubectl') {
+               waitForAllPodsRunning('cd-pipeline')
+               waitForAllServicesRunning('cd-pipeline')
             }
         }
     }
