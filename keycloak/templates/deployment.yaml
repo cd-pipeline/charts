@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: jboss/keycloak:3.4.0.Final
+        command: ["/bin/sh"]
+        args: ["-c", "/opt/jboss/keycloak/bin/standalone.sh --debug -c standalone.xml -b 0.0.0.0 -Djboss.bind.address.management=0.0.0.0"]
+        env:
+        - name: KEYCLOAK_USER
+          value: admin
+        - name: KEYCLOAK_PASSWORD
+          value: admin
+        ports:
+          - name: http
+            containerPort: 8080
+          - name: https
+            containerPort: 8443
