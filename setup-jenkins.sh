@@ -2,6 +2,10 @@ kubectl delete namespace cd-pipeline || true
 sleep 10
 kubectl create namespace cd-pipeline
 
+kubectl delete namespace production || true
+sleep 10
+kubectl create namespace production
+
 helm delete --purge jenkins || true
 sleep 10
 
