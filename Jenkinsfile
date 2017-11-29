@@ -31,8 +31,8 @@ podTemplate(label: 'mypod', containers: [
             git url: 'https://github.com/cd-pipeline/charts.git'
 
             container('helm') {
-               sh "helm delete --purge sonarqube || true"
-               sh "helm install --name sonarqube ./sonarqube -f ./config/sonarqube.yml --namespace ${projectNamespace}"
+               sh "helm delete --purge jenkins || true"
+               sh "helm install --name jenkins -f ./config/jenkins.yml stable/jenkins --namespace ${projectNamespace}"
             }
 
             container('kubectl') {
