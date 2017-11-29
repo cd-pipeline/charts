@@ -19,8 +19,23 @@ podTemplate(label: 'mypod', containers: [
         stage('Configure Kubernetes') {
             git url: 'https://github.com/cd-pipeline/charts.git'
             container('kubectl') {
-                sh "kubectl delete secret jenkins-maven-settings -n cd-pipeline || true"
-                sh "kubectl create secret generic jenkins-maven-settings --from-file=./settings.xml -n cd-pipeline"
+                sh "kubectl delete secret jenkins-maven-settings -n ${projectNamespace} || true"
+                sh "kubectl create secret generic jenkins-maven-settings --from-file=./settings.xml -n ${projectNamespace}"
+            }
+        }
+
+        stage('Install Jenkins') {
+            git url: 'https://github.com/cd-pipeline/charts.git'
+
+            container('helm') {
+               sh "helm delete --purge sonarqube || true"
+               sh "helm install --name sonarqube ./sonarqube -f ./config/sonarqube.yml --namespace ${projectNamespace}"
+            }
+
+            container('kubectl') {
+               sh "kubectl get pods -n ${projectNamespace}"
+               waitForAllPodsRunning('${projectNamespace}')
+               waitForAllServicesRunning('${projectNamespace}')
             }
         }
 
@@ -29,13 +44,13 @@ podTemplate(label: 'mypod', containers: [
 
             container('helm') {
                sh "helm delete --purge nexus || true"
-               sh "helm install --name nexus -f ./config/nexus.yml stable/sonatype-nexus --namespace cd-pipeline"
+               sh "helm install --name nexus -f ./config/nexus.yml stable/sonatype-nexus --namespace ${projectNamespace}"
             }
 
             container('kubectl') {
                sh "kubectl get pods -n cd-pipeline"
-               waitForAllPodsRunning('cd-pipeline')
-               waitForAllServicesRunning('cd-pipeline')
+               waitForAllPodsRunning('${projectNamespace}')
+               waitForAllServicesRunning('${projectNamespace}')
             }
         }
 
@@ -44,13 +59,13 @@ podTemplate(label: 'mypod', containers: [
 
             container('helm') {
                sh "helm delete --purge sonarqube || true"
-               sh "helm install --name sonarqube ./sonarqube -f ./config/sonarqube.yml --namespace cd-pipeline"
+               sh "helm install --name sonarqube ./sonarqube -f ./config/sonarqube.yml --namespace ${projectNamespace}"
             }
 
             container('kubectl') {
-               sh "kubectl get pods -n cd-pipeline"
-               waitForAllPodsRunning('cd-pipeline')
-               waitForAllServicesRunning('cd-pipeline')
+               sh "kubectl get pods -n ${projectNamespace}"
+               waitForAllPodsRunning('${projectNamespace}')
+               waitForAllServicesRunning('${projectNamespace}')
             }
         }
 
@@ -62,8 +77,8 @@ podTemplate(label: 'mypod', containers: [
             }
 
             container('kubectl') {
-               waitForAllPodsRunning('cd-pipeline')
-               waitForAllServicesRunning('cd-pipeline')
+               waitForAllPodsRunning('${projectNamespace}')
+               waitForAllServicesRunning('${projectNamespace}')
             }
         }
     }
