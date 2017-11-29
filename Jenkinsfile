@@ -8,6 +8,8 @@ podTemplate(label: 'mypod', containers: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
   ]) {
     node('mypod') {
+        def projectNamespace = "${env.JOB_NAME}".tokenize('/')[0]
+        
         stage('Helm Init') {
             container('helm') {
                sh "helm init --client-only"
