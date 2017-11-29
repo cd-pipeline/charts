@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: cavemandaveman/nexus
-  tag: 3.6.0-02
+  tag: 3.6.1-02
 service:
   name: nexus
   type: LoadBalancer
