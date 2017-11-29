@@ -19,9 +19,7 @@ podTemplate(label: 'mypod', containers: [
         stage('Configure Kubernetes') {
             git url: 'https://github.com/cd-pipeline/charts.git'
             container('kubectl') {
-                sh "kubectl delete namespace ${projectNamespace} || true"
-                sh "sleep 10"
-                sh "kubectl create namespace ${projectNamespace}"
+                sh "kubectl create namespace ${projectNamespace} || true"
                 sh "kubectl delete secret jenkins-maven-settings -n ${projectNamespace} || true"
                 sh "kubectl create secret generic jenkins-maven-settings --from-file=./settings.xml -n ${projectNamespace}"
             }
