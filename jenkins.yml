@@ -59,8 +59,70 @@ Master:
   #   - "new groovy.json.JsonSlurperClassic"
 # List of groovy init scripts to be executed during Jenkins master start
   InitScripts:
-#  - |
-#    print 'adding global pipeline libraries, register properties, bootstrap jobs...'
+  - |
+    import jenkins.model.Jenkins;
+    import org.jenkinsci.plugins.workflow.job.WorkflowJob
+    import com.cloudbees.plugins.credentials.*
+    import com.cloudbees.plugins.credentials.common.*
+    import com.cloudbees.plugins.credentials.domains.*
+    import com.cloudbees.jenkins.plugins.sshcredentials.impl.*
+    import org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition
+    import hudson.plugins.git.*;
+
+    import hudson.plugins.sshslaves.*
+
+    global_domain = Domain.global()
+    credentials_store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
+    credentials = new BasicSSHUserPrivateKey(
+            CredentialsScope.GLOBAL,
+            'cd_pipeline_id_rsa',
+            'cd_pipeline_id_rsa',
+            new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource("""-----BEGIN RSA PRIVATE KEY-----
+    MIIEowIBAAKCAQEAthuXHaoJxkUWowHn1ftcRIiT+VYfJBGT/6EhIUwb6Abe02Ra
+    zxdzUn4I2o6juWyMUelNYkDuUHVFkJENxiybs0A+13qF3N7ckQB1+1GvCGXe502d
+    WjC4c1cFyk0ScEDlCMMfo+E120Glto1tQcTH2CAaBNCGpC3IfuVmUoqy4YDn3W9n
+    aaZ1s2AkWZNjU7zX079SYaEzAVv6M5lDMC/Q9H01oSV1vXH7Go48LdckZ0QVYoRB
+    kZGzZ/EtWl8PE7cKaNjdlvwPVdVOIG5sTjJCydcCOBRP6INlUtL8b0UsITF0nZpg
+    ERkLMBvmyMwRl0v8C3hwLVPSHwafla7C/RrGxwIDAQABAoIBABa0a+vj5mIU/RSH
+    yUrxkvhset6McUeC9YvaoBHRtm0AZkm+6l+FkfhIBHyTajBVK02PI/nLFKttY6X5
+    n9kEeMkpimw9N3FpS+C8SPlznroSUW9PSv4SsvyWbf9iCpl6TdQA1/ILwzY6Aho3
+    mdaoXS5CGlxdT1wq5SOFIHPMHS9mOCqiQLQo3hsZpdlMzBuSJkl1ZF3PUuRmOF5P
+    SY5+LwDL6o1R8f15sbOKLZo5gIMH/JIEHLth/eQIfTehBoTZTj0m5BiV3ISnJKLj
+    XQniLebnzquEwCjIPSoAf+K9ql21m0lgGYBLBAQooWiGTUmVzDS+B8NOgqvoJ2PC
+    AD0hCUkCgYEA2fs47/l5wheuQc+JI9/Q9bK+NpIGyF9K7Hsq6owvlXLEtv0WRreo
+    jvizUQG/iEuLzX+HrUiDK/bfoVQDUUtjBSyTLddcNvsMnpV4c5jXf+Tq1uebxoi5
+    gBkPIE+gCzEW5cmXtqRyt/izIXsLvFsU2Nkl7lFyZIRJ9HKnV4H+xAMCgYEA1d6g
+    wn4hSf6kylqV79y+nY8j9BPpuQ/AInnQAczFELXLUDOxdwmugQ22qj5Csn4k4lhU
+    H8CfNDI9RrfuVMxwHvmA1JP7i7ReL1aTmLxlo7/OIwBooYNeDuMtun+nuclpYpcf
+    nWmgNLoBTN149+ffGxivywk0/J0/tsNdhAIqcO0CgYAeQeH4ZY/CIllc5zrpEONH
+    h6UhnAl2/MtAoiQl5ImiXAj0QZM7A7lRBzKU1wJIH/xq7P3fTsZubtlB4pCHU0iO
+    ak6PuWoic5yf0q2ilh+rsBHs/L9Bwq7FGjVgTc0wYIMGKIJ3psIJyWrMBfFuFtKA
+    +ztppkKTs000skmKOxArEwKBgGIOkOabreefOS8OGXDAZSUYXAOsnZyb/BvSfexV
+    VoUy1OUQzm0lozzIbNfhc/MiowakOO3WAyiLYEzsR/nZQg7xln/g2ZRUPlq19zYw
+    KunJJ1ok9dQXxyhMQMshfGVSU19Aqt4hb7K9FZuIb846IbDqwK72qbSo5G2HZXkB
+    BTSBAoGBAIACK26D42/1xMQI2fBajWlBIeHeluTV6v8jgZYHiIv+jdezbFM8+zrW
+    y5B8WzyEjK40NdWAsuvcV1H+Xsw29MpvMG1/AZF3YMEtVuPscP3VhtGusN+XzvvK
+    7tu3K8CbuniU/c7nuj8uhSL9efVAIwe04mm44WI4WCvkAOplL942
+    -----END RSA PRIVATE KEY-----
+    """),
+            "",
+            ""
+    )
+    credentials_store.addCredentials(global_domain, credentials)
+
+    WorkflowJob job = Jenkins.instance.createProject(WorkflowJob, 'forsythe-aag-devops')
+
+    def scm = new GitSCM('git@github.com:cd-pipeline/charts.git')
+    scm.branches = [new BranchSpec("*/master")];
+    scm.userRemoteConfigs[0].credentialsId = 'cd_pipeline_id_rsa'
+
+    def flowDefinition = new CpsScmFlowDefinition(scm, 'Jenkinsfile')
+    job.definition = flowDefinition
+    job.setConcurrentBuild(false);
+    job.save()
+
+    job.scheduleBuild2(0)
+    Jenkins.instance.reload()
   CustomConfigMap: false
 # Node labels and tolerations for pod assignment
 # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
