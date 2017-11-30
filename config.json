@@ -1,0 +1,10 @@
+{
+  "auths": {
+    "quay.io": {
+      "auth": "em90b3ZzYTpEU3NkZmpAZkAxZHgyMTM1NHI="
+    }
+  },
+  "HttpHeaders": {
+    "User-Agent": "Docker-Client/17.11.0-ce (linux)"
+  }
+}
