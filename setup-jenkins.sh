@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 kubectl delete namespace devops || true
 sleep 20
 

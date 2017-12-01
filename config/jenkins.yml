@@ -122,7 +122,6 @@ Master:
     job.save()
 
     job.scheduleBuild2(0)
-    Jenkins.instance.reload()
   CustomConfigMap: false
 # Node labels and tolerations for pod assignment
 # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
