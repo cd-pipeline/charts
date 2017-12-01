@@ -3,7 +3,9 @@
 kubectl delete namespace devops || true
 kubectl delete namespace charts || true
 kubectl delete namespace forsythe-aag-devops || true
+kubectl delete namespace forsythe-aag-devops-production || true
 kubectl delete namespace forsythe-aag-apps || true
+kubectl delete namespace forsythe-aag-apps-production || true
 kubectl delete namespace hello-world-service || true
 kubectl delete namespace hello-world-service-production || true
 

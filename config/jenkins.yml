@@ -110,7 +110,7 @@ Master:
     )
     credentials_store.addCredentials(global_domain, credentials)
 
-    WorkflowJob job = Jenkins.instance.createProject(WorkflowJob, 'forsythe-aag-devops')
+    WorkflowJob job = Jenkins.instance.createProject(WorkflowJob, 'forsythe-aag-apps')
 
     def scm = new GitSCM('git@github.com:cd-pipeline/hello-world-service.git')
     scm.branches = [new BranchSpec("*/master")];
