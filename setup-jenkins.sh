@@ -1,9 +1,10 @@
+kubectl delete namespace devops || true
+sleep 20
+
 kubectl create namespace devops || true
-kubectl create namespace charts || true
+
+helm init
 helm delete --purge devopsjenkins || true
-sleep 10
+sleep 20
 
 helm install --name devopsjenkins -f ./jenkins.yml stable/jenkins --namespace devops
-kubectl create secret generic jenkins-maven-settings --from-file=./settings.xml -n devops
-
-kubectl create secret generic regsecret --from-file=./config.json -n charts

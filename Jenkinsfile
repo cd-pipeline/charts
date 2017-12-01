@@ -106,7 +106,7 @@ def waitForAllServicesRunning(String namespace) {
             servicesStatus = sh(returnStdout: true, script: "kubectl --namespace='${namespace}' get services --no-headers").trim()
             def notRunning = servicesStatus.readLines().findAll { line -> line.contains('pending') }
             if (notRunning.isEmpty()) {
-                echo 'All pods are running'
+                echo 'All services are running'
                 break
             }
             sh "kubectl --namespace='${namespace}' get services"
