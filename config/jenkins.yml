@@ -68,6 +68,9 @@ Master:
     import com.cloudbees.jenkins.plugins.sshcredentials.impl.*
     import org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition
     import hudson.plugins.git.*;
+    import org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject;
+    import jenkins.plugins.git.GitSCMSource;
+    import jenkins.branch.*
 
     import hudson.plugins.sshslaves.*
 
@@ -110,17 +113,12 @@ Master:
     )
     credentials_store.addCredentials(global_domain, credentials)
 
-    WorkflowJob job = Jenkins.instance.createProject(WorkflowJob, 'forsythe-aag-apps')
+    def job = Jenkins.instance.createProject(WorkflowMultiBranchProject, 'forsythe-aag-apps')
+    job.getSourcesList().add(new BranchSource(new GitSCMSource(null, "git@github.com:cd-pipeline/hello-world-service.git",
+                                                                 "cd_pipeline_id_rsa", "master", "", false),
+                                                new DefaultBranchPropertyStrategy(new BranchProperty[0])));
 
-    def scm = new GitSCM('git@github.com:cd-pipeline/hello-world-service.git')
-    scm.branches = [new BranchSpec("*/master")];
-    scm.userRemoteConfigs[0].credentialsId = 'cd_pipeline_id_rsa'
-
-    def flowDefinition = new CpsScmFlowDefinition(scm, 'Jenkinsfile')
-    job.definition = flowDefinition
-    job.setConcurrentBuild(false);
     job.save()
-
     job.scheduleBuild2(0)
   CustomConfigMap: false
 # Node labels and tolerations for pod assignment
