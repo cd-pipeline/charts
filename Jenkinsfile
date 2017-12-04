@@ -37,8 +37,8 @@ podTemplate(label: 'mypod', containers: [
 
             container('kubectl') {
                sh "kubectl get pods -n ${projectNamespace}"
-               waitForAllPodsRunning('${projectNamespace}')
-               waitForAllServicesRunning('${projectNamespace}')
+               waitForAllPodsRunning("${projectNamespace}")
+               waitForAllServicesRunning("${projectNamespace}")
             }
         }
 
@@ -52,8 +52,8 @@ podTemplate(label: 'mypod', containers: [
 
             container('kubectl') {
                sh "kubectl get pods -n cd-pipeline"
-               waitForAllPodsRunning('${projectNamespace}')
-               waitForAllServicesRunning('${projectNamespace}')
+               waitForAllPodsRunning("${projectNamespace}")
+               waitForAllServicesRunning("${projectNamespace}")
             }
         }
 
@@ -67,8 +67,8 @@ podTemplate(label: 'mypod', containers: [
 
             container('kubectl') {
                sh "kubectl get pods -n ${projectNamespace}"
-               waitForAllPodsRunning('${projectNamespace}')
-               waitForAllServicesRunning('${projectNamespace}')
+               waitForAllPodsRunning("${projectNamespace}")
+               waitForAllServicesRunning("${projectNamespace}")
             }
         }
 
@@ -80,8 +80,8 @@ podTemplate(label: 'mypod', containers: [
             }
 
             container('kubectl') {
-               waitForAllPodsRunning('${projectNamespace}')
-               waitForAllServicesRunning('${projectNamespace}')
+               waitForAllPodsRunning("${projectNamespace}")
+               waitForAllServicesRunning("${projectNamespace}")
             }
         }
 
