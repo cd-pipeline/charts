@@ -62,7 +62,7 @@ podTemplate(label: 'mypod', containers: [
 
             container('helm') {
                sh "helm delete --purge sonarqube || true"
-               sh "helm install --name sonarqube ./sonarqube -f ./developer-tools/sonarqube/config/sonarqube.yml --namespace ${projectNamespace}"
+               sh "helm install --name sonarqube ./developer-tools/sonarqube -f ./developer-tools/sonarqube/config/sonarqube.yml --namespace ${projectNamespace}"
             }
 
             container('kubectl') {
