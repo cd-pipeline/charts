@@ -83,6 +83,18 @@ podTemplate(label: 'mypod', containers: [
                waitForAllServicesRunning('${projectNamespace}')
             }
         }
+
+        stage('Summary') {
+            container('kubectl') {
+               print "All dev tools deployed to ${projectNamespace}"
+               nexusEndpoint = sh(returnStdout: true, script: "kubectl --namespace='${projectNamespace}' get svc nexus-sonatype-nexus --no-headers --template '{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}'").trim()
+               jenkinsEndpoint = sh(returnStdout: true, script: "kubectl --namespace='${projectNamespace}' get svc jenkins-jenkins --no-headers --template '{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}'").trim()
+               sonarEndpoint = sh(returnStdout: true, script: "kubectl --namespace='${projectNamespace}' get svc sonarqube --no-headers --template '{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}'").trim()
+               print "Jenkins can be accessed at: http://${jenkinsEndpoint}:8080"
+               print "Nexus can be accessed at: http://${nexusEndpoint}:8081"
+               print "SonarQube can be accessed at: http://${nexusEndpoint}:8081"
+            }
+        }
     }
 }
 
