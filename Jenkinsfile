@@ -22,8 +22,8 @@ podTemplate(label: 'mypod', containers: [
                 sh "kubectl create namespace ${projectNamespace} || true"
                 sh "kubectl delete secret jenkins-maven-settings -n ${projectNamespace} || true"
                 sh "kubectl delete secret regsecret -n ${projectNamespace} || true"
-                sh "kubectl create secret generic jenkins-maven-settings --from-file=./settings.xml -n ${projectNamespace}"
-                sh "kubectl create secret generic regsecret --from-file=./config.json -n ${projectNamespace}"
+                sh "kubectl create secret generic jenkins-maven-settings --from-file=./developer-tools/config/settings.xml -n ${projectNamespace}"
+                sh "kubectl create secret generic regsecret --from-file=./developer-tools/config/config.json -n ${projectNamespace}"
             }
         }
 
@@ -32,7 +32,7 @@ podTemplate(label: 'mypod', containers: [
 
             container('helm') {
                sh "helm delete --purge jenkins || true"
-               sh "helm install --name jenkins -f ./config/jenkins.yml stable/jenkins --namespace ${projectNamespace}"
+               sh "helm install --name jenkins -f ./developer-tools/jenkins/config/jenkins.yml stable/jenkins --namespace ${projectNamespace}"
             }
 
             container('kubectl') {
@@ -47,7 +47,7 @@ podTemplate(label: 'mypod', containers: [
 
             container('helm') {
                sh "helm delete --purge nexus || true"
-               sh "helm install --name nexus -f ./config/nexus.yml stable/sonatype-nexus --namespace ${projectNamespace}"
+               sh "helm install --name nexus -f ./developer-tools/nexus/config/nexus.yml stable/sonatype-nexus --namespace ${projectNamespace}"
             }
 
             container('kubectl') {
@@ -62,7 +62,7 @@ podTemplate(label: 'mypod', containers: [
 
             container('helm') {
                sh "helm delete --purge sonarqube || true"
-               sh "helm install --name sonarqube ./sonarqube -f ./config/sonarqube.yml --namespace ${projectNamespace}"
+               sh "helm install --name sonarqube ./sonarqube -f ./developer-tools/sonarqube/config/sonarqube.yml --namespace ${projectNamespace}"
             }
 
             container('kubectl') {

@@ -1,15 +1,7 @@
 # charts
 Helm Charts for CI/CD pipeline
 
-#### Install Jenkins:
+#### Install DevOps Jenkins:
 
-sh ./setup-jenkins.sh
-
-kubectl delete namespace cd-pipeline || true
-
-kubectl create namespace cd-pipeline || true
-
-helm delete --purge sonarqube || true
-
-Install sonarqube:
-helm install --name sonarqube ./sonarqube/ --namespace cd-pipeline
+sh ./clean-cluster.sh
+sh ./devops-tools/setup-jenkins.sh
