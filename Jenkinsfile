@@ -21,6 +21,7 @@ podTemplate(label: 'mypod', containers: [
             container('kubectl') {
                 sh "kubectl create namespace ${projectNamespace} || true"
                 sh "kubectl delete secret jenkins-maven-settings -n ${projectNamespace} || true"
+                sh "kubectl delete secret regsecret -n ${projectNamespace} || true"
                 sh "kubectl create secret generic jenkins-maven-settings --from-file=./settings.xml -n ${projectNamespace}"
                 sh "kubectl create secret generic regsecret --from-file=./config.json -n ${projectNamespace}"
             }
