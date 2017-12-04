@@ -87,6 +87,7 @@ podTemplate(label: 'mypod', containers: [
 
         stage('Summary') {
             container('kubectl') {
+               sh "sleep 20"
                print "All dev tools deployed to ${projectNamespace}"
                nexusEndpoint = sh(returnStdout: true, script: "kubectl --namespace='${projectNamespace}' get svc nexus-sonatype-nexus --no-headers --template '{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}'").trim()
                jenkinsEndpoint = sh(returnStdout: true, script: "kubectl --namespace='${projectNamespace}' get svc jenkins-jenkins --no-headers --template '{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}'").trim()
