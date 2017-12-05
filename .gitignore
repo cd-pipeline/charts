@@ -1,1 +1,4 @@
 .idea
+jenkins-config.yml
+devops-ssh-key
+env.sh
