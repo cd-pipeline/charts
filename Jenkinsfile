@@ -32,7 +32,7 @@ podTemplate(label: 'mypod', containers: [
 
             container('helm') {
                sh "helm delete --purge jenkins || true"
-               sh "helm install --name jenkins -f ./developer-tools/jenkins/config/jenkins.yml stable/jenkins --namespace ${projectNamespace}"
+               sh "helm install --name jenkins ./helm/charts/jenkins -f ./developer-tools/jenkins/config/jenkins.yml --namespace ${projectNamespace}"
             }
 
             container('kubectl') {

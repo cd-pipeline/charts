@@ -8,4 +8,4 @@ helm init
 helm delete --purge devopsjenkins || true
 sleep 20
 
-helm install --name devopsjenkins -f ./devops-tools/jenkins/config/jenkins.yml stable/jenkins --namespace devops
+helm install --name devopsjenkins ./helm/charts/jenkins -f ./devops-tools/jenkins/config/jenkins.yml --namespace devops
