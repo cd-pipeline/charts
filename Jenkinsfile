@@ -80,7 +80,7 @@ podTemplate(label: 'mypod', containers: [
                sonarEndpoint = sh(returnStdout: true, script: "kubectl --namespace='${projectNamespace}' get svc sonarqube --no-headers --template '{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}'").trim()
                print "Jenkins can be accessed at: http://${jenkinsEndpoint}:8080"
                print "Nexus can be accessed at: http://${nexusEndpoint}:8081"
-               print "SonarQube can be accessed at: http://${nexusEndpoint}:8081"
+               print "SonarQube can be accessed at: http://${sonarEndpoint}:8081"
             }
         }
     }
