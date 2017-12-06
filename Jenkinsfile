@@ -27,21 +27,6 @@ podTemplate(label: 'mypod', containers: [
             }
         }
 
-        stage('Install Jenkins') {
-            git url: 'https://github.com/cd-pipeline/charts.git'
-
-            container('helm') {
-               sh "helm delete --purge jenkins || true"
-               sh "helm install --name jenkins ./helm/charts/jenkins -f ./developer-tools/jenkins/config/jenkins.yml --namespace ${projectNamespace}"
-            }
-
-            container('kubectl') {
-               sh "kubectl get pods -n ${projectNamespace}"
-               waitForAllPodsRunning("${projectNamespace}")
-               waitForAllServicesRunning("${projectNamespace}")
-            }
-        }
-
         stage('Install Nexus') {
             git url: 'https://github.com/cd-pipeline/charts.git'
 
@@ -63,6 +48,21 @@ podTemplate(label: 'mypod', containers: [
             container('helm') {
                sh "helm delete --purge sonarqube || true"
                sh "helm install --name sonarqube ./helm/charts/sonarqube -f ./developer-tools/sonarqube/config/sonarqube.yml --namespace ${projectNamespace}"
+            }
+
+            container('kubectl') {
+               sh "kubectl get pods -n ${projectNamespace}"
+               waitForAllPodsRunning("${projectNamespace}")
+               waitForAllServicesRunning("${projectNamespace}")
+            }
+        }
+
+        stage('Install Jenkins') {
+            git url: 'https://github.com/cd-pipeline/charts.git'
+
+            container('helm') {
+               sh "helm delete --purge jenkins || true"
+               sh "helm install --name jenkins ./helm/charts/jenkins -f ./developer-tools/jenkins/config/jenkins.yml --namespace ${projectNamespace}"
             }
 
             container('kubectl') {
