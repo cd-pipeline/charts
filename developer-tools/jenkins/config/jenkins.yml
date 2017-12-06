@@ -58,6 +58,8 @@ Master:
 # Used to approve a list of groovy functions in pipelines used the script-security plugin. Can be viewed under /scriptApproval
   ScriptApproval:
     - "staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods readLines java.lang.String"
+    - "method groovy.lang.GroovyObject getProperty java.lang.String"
+    - "method groovy.lang.GroovyObject invokeMethod java.lang.String java.lang.Object"
   #   - "new groovy.json.JsonSlurperClassic"
 # List of groovy init scripts to be executed during Jenkins master start
   InitScripts:
