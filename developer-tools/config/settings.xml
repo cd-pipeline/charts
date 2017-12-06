@@ -8,7 +8,7 @@
             <mirrorOf>*</mirrorOf>
         </mirror>
     </mirrors>
-    
+
     <servers>
         <server>
             <id>snapshots</id>
