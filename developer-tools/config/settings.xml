@@ -21,4 +21,5 @@
             <password>admin123</password>
         </server>
     </servers>
+    <localRepository>/root/.m2nrepo</localRepository>
 </settings>
