@@ -24,8 +24,8 @@ podTemplate(label: 'mypod', containers: [
                 sh "kubectl delete secret regsecret -n ${projectNamespace} || true"
                 sh "kubectl create secret generic jenkins-maven-settings --from-file=./developer-tools/config/settings.xml -n ${projectNamespace}"
                 sh "kubectl create secret generic regsecret --from-file=./devops-tools/config/config.json -n ${projectNamespace}"
-                sh "kubectl create -f ./devops-tools/maven-pv.yaml -n ${projectNamespace} || true"
-                sh "kubectl create -f ./devops-tools/maven-pvc.yaml -n ${projectNamespace} || true"
+                sh "kubectl create -f ./devops-tools/config/maven-pv.yaml -n ${projectNamespace} || true"
+                sh "kubectl create -f ./devops-tools/config/maven-pvc.yaml -n ${projectNamespace} || true"
             }
         }
 
